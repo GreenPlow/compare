@@ -46,8 +46,8 @@ def test_setup_parser(mocker, mocks_for_arg):
 
     expected_add_argument_calls = [
         mocker.call('src', type=str, help='the dir to copy files from'),
-        mocker.call('dest', type=str, help='the dir where files will be checked for duplicates and copied to'),
-        mocker.call('-hidden', '--hidden', action='store_true', help='copy hidden files also', default=False)
+        mocker.call('dest', type=str, help='the dir where files are checked for duplicates and copied to'),
+        mocker.call('--hidden', action='store_true', help='copy hidden files also', default=False)
     ]
 
     # when:
