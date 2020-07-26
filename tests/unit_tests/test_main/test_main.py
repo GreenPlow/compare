@@ -46,4 +46,4 @@ def test_call_parse_args(mocker):
     main.main()
 
     # then:
-    mocked_args_helper.parse_args.assert_called_once_with()
+    mocked_args_helper.parse_args.assert_called_once_with(sys.argv[1:])
