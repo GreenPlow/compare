@@ -7,14 +7,12 @@ from typing import NamedTuple
 
 @pytest.fixture()
 def fixture_args_helper(mocker):
-    mocker.patch.object(main, 'args_helper', autospec=True)
-    return main.args_helper
+    return mocker.patch.object(main, 'args_helper', autospec=True)
 
 
 @pytest.fixture()
 def fixture_validate(mocker):
-    mocker.patch.object(main, 'Validate', autospec=True)
-    return main.Validate
+    return mocker.patch.object(main, 'Validate', autospec=True)
 
 
 class FakeVersion(NamedTuple):
