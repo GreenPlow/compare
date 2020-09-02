@@ -6,7 +6,7 @@ from typing import NamedTuple
 
 
 @pytest.fixture(autouse=True)
-def mockfix_args_helper(mocker):
+def fixture_args_helper(mocker):
     mocker.patch.object(main, 'args_helper', autospec=True)
     return main.args_helper
 
@@ -15,7 +15,7 @@ class FakeVersion(NamedTuple):
     major: int
 
 
-def test_python_version_error(mocker):
+def test_fail_python3_version_check(mocker):
     """should raise an error when main.py is called with a version of python below v3"""
     # given:
     unsupported_python = FakeVersion(2)
@@ -27,12 +27,12 @@ def test_python_version_error(mocker):
         main.main()
 
 
-def test_python_is_version_3(mocker, mockfix_args_helper):
+def test_pass_python3_version_check(mocker, fixture_args_helper):
     """should not raise an error when main.py is called with python3"""
     # given:
-    mocked_Validate = mocker.patch.object(main, 'Validate', autospec=True)
+    mocker.patch.object(main, 'Validate', autospec=True)
     supported_python = FakeVersion(3)
-    # TODO is this the right sys to mock? should it be sys the prod code?
+    # TODO review second usage of patch.object(). Should we mock the sys in the prod file?
     mocker.patch.object(sys, 'version_info', supported_python)
 
     # when:
@@ -43,76 +43,69 @@ def test_python_is_version_3(mocker, mockfix_args_helper):
         assert e is None
 
 
-def test_parse_args(mocker, mockfix_args_helper):
-    """should call the parse_args() function from args_helper"""
+def test_get_arguments_from_parse_args(mocker, fixture_args_helper):
+    """should call the parse_args() function from args_helper with [1:]"""
     # given:
-    mocked_Validate = mocker.patch.object(main, 'Validate', autospec=True)
+    mocker.patch.object(main, 'Validate', autospec=True)
 
     # when:
     main.main()
 
     # then assert:
-    mockfix_args_helper.parse_args.assert_called_once_with(sys.argv[1:])
-
-    # alternate test assertation
-    # expected_calls = [
-    #     mocker.call(sys.argv[1:])
-    # ]
-    # assert mockfix_args_helper.parse_args.call_args_list == expected_calls
+    fixture_args_helper.parse_args.assert_called_once_with(sys.argv[1:])
 
 
-def test_create_instance_of_validate_and_validate_input(mocker, mockfix_args_helper):
+def test_create_instance_of_validate_and_validate_input(mocker, fixture_args_helper):
     """should create an instance of validate and call validate_input()"""
     # given:
-    mocked_Validate = mocker.patch.object(main, 'Validate', autospec=True)
-
+    validate_mock = mocker.patch.object(main, 'Validate', autospec=True)
     supported_python = FakeVersion(3)
     mocker.patch.object(sys, 'version_info', supported_python)
 
-    args_object = mockfix_args_helper.parse_args.return_value
-    setup = mocked_Validate.return_value
+    args_object = fixture_args_helper.parse_args.return_value
+    setup_mock = validate_mock.return_value
 
     # when:
 
     main.main()
 
     # then assert:
-    mocked_Validate.assert_called_once_with(args_object)
-    setup.validate_input.assert_called_once_with()
+    validate_mock.assert_called_once_with(args_object)
+    setup_mock.validate_input.assert_called_once_with()
 
 
-def test_exit_if_validate_input_is_false(mocker, mockfix_args_helper):
-    """should create an instance of validate and exit if paths are not real dirs"""
+def test_if_validate_input_is_false_exit_script(mocker, fixture_args_helper):
+    """should exit if paths are not real dirs"""
     # given:
-    mocked_Validate = mocker.patch.object(main, 'Validate', autospec=True)
+    validate_mock = mocker.patch.object(main, 'Validate', autospec=True)
 
     supported_python = FakeVersion(3)
     mocker.patch.object(sys, 'version_info', supported_python)
 
-    setup = mocked_Validate.return_value
-    setup.validate_input.return_value = False
+    setup_mock = validate_mock.return_value
+    setup_mock.validate_input.return_value = False
 
-    #then assert:
+    # then assert:
     with pytest.raises(SystemExit, match="1"):
         # when:
         main.main()
 
 
-def test_print_okay_of_validate_input_is_true(mocker):
-    """should create an instance of validate and print okay if paths are real dirs"""
+def test_if_validate_input_is_true_print_text(mocker):
+    """should print okay and dir paths if paths are real dirs"""
     # given:
     mocked_print = mocker.patch.object(main, 'print')
-    mocked_Validate = mocker.patch.object(main, 'Validate', autospec=True)
+    validate_mock = mocker.patch.object(main, 'Validate', autospec=True)
 
     supported_python = FakeVersion(3)
     mocker.patch.object(sys, 'version_info', supported_python)
 
-    setup = mocked_Validate.return_value
-    setup.validate_input.return_value = True
+    setup_mock = validate_mock.return_value
+    setup_mock.validate_input.return_value = True
 
     # when:
     main.main()
 
     # then assert:
     mocked_print.assert_called_once_with('\nBoth paths okay!\n')
-    setup.print_paths.assert_called_once_with()
+    setup_mock.print_paths.assert_called_once_with()
