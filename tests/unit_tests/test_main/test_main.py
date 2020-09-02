@@ -5,10 +5,16 @@ import pytest
 from typing import NamedTuple
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture()
 def fixture_args_helper(mocker):
     mocker.patch.object(main, 'args_helper', autospec=True)
     return main.args_helper
+
+
+@pytest.fixture()
+def fixture_validate(mocker):
+    mocker.patch.object(main, 'Validate', autospec=True)
+    return main.Validate
 
 
 class FakeVersion(NamedTuple):
@@ -27,10 +33,9 @@ def test_fail_python3_version_check(mocker):
         main.main()
 
 
-def test_pass_python3_version_check(mocker, fixture_args_helper):
+def test_pass_python3_version_check(mocker, fixture_args_helper, fixture_validate):
     """should not raise an error when main.py is called with python3"""
     # given:
-    mocker.patch.object(main, 'Validate', autospec=True)
     supported_python = FakeVersion(3)
     # TODO review second usage of patch.object(). Should we mock the sys in the prod file?
     mocker.patch.object(sys, 'version_info', supported_python)
@@ -43,10 +48,9 @@ def test_pass_python3_version_check(mocker, fixture_args_helper):
         assert e is None
 
 
-def test_get_arguments_from_parse_args(mocker, fixture_args_helper):
+def test_get_arguments_from_parse_args(fixture_args_helper, fixture_validate):
     """should call the parse_args() function from args_helper with [1:]"""
     # given:
-    mocker.patch.object(main, 'Validate', autospec=True)
 
     # when:
     main.main()
@@ -55,34 +59,31 @@ def test_get_arguments_from_parse_args(mocker, fixture_args_helper):
     fixture_args_helper.parse_args.assert_called_once_with(sys.argv[1:])
 
 
-def test_create_instance_of_validate_and_validate_input(mocker, fixture_args_helper):
+def test_create_instance_of_validate_and_validate_input(mocker, fixture_args_helper, fixture_validate):
     """should create an instance of validate and call validate_input()"""
     # given:
-    validate_mock = mocker.patch.object(main, 'Validate', autospec=True)
     supported_python = FakeVersion(3)
     mocker.patch.object(sys, 'version_info', supported_python)
 
     args_object = fixture_args_helper.parse_args.return_value
-    setup_mock = validate_mock.return_value
+    setup_mock = fixture_validate.return_value
 
     # when:
 
     main.main()
 
     # then assert:
-    validate_mock.assert_called_once_with(args_object)
+    fixture_validate.assert_called_once_with(args_object)
     setup_mock.validate_input.assert_called_once_with()
 
 
-def test_if_validate_input_is_false_exit_script(mocker, fixture_args_helper):
+def test_if_validate_input_is_false_exit_script(mocker, fixture_args_helper, fixture_validate):
     """should exit if paths are not real dirs"""
     # given:
-    validate_mock = mocker.patch.object(main, 'Validate', autospec=True)
-
     supported_python = FakeVersion(3)
     mocker.patch.object(sys, 'version_info', supported_python)
 
-    setup_mock = validate_mock.return_value
+    setup_mock = fixture_validate.return_value
     setup_mock.validate_input.return_value = False
 
     # then assert:
@@ -91,16 +92,15 @@ def test_if_validate_input_is_false_exit_script(mocker, fixture_args_helper):
         main.main()
 
 
-def test_if_validate_input_is_true_print_text(mocker):
+def test_if_validate_input_is_true_print_text(mocker, fixture_args_helper, fixture_validate):
     """should print okay and dir paths if paths are real dirs"""
     # given:
     mocked_print = mocker.patch.object(main, 'print')
-    validate_mock = mocker.patch.object(main, 'Validate', autospec=True)
 
     supported_python = FakeVersion(3)
     mocker.patch.object(sys, 'version_info', supported_python)
 
-    setup_mock = validate_mock.return_value
+    setup_mock = fixture_validate.return_value
     setup_mock.validate_input.return_value = True
 
     # when:
