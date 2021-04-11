@@ -3,10 +3,16 @@
 
 ### to develop
 1) Make a virtual environment in a project root
-```python3 -m venv venv```shell
+```shell
+python3 -m venv venv
+```
 
 2) Activate the venv:
-```source env/bin/activate```shell
+```shell
+source env/bin/activate
+```
 
 3) Install the requirements
-```pip3 install -r requirements.txt```shell
+```shell
+pip3 install -r requirements.txt
+```
