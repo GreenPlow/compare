@@ -20,4 +20,5 @@ jobs:
           pipenv run black --check .
       - name: Run pytest
         run: |
+          pipenv install -e . --dev
           pipenv run pytest
