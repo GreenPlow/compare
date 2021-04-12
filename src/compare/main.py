@@ -1,5 +1,5 @@
 import sys
-import args_helper
+from compare import args_helper
 
 
 def main():
