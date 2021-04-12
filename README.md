@@ -12,7 +12,7 @@ $ mkdir .venv
 $ pipenv --three
 ```
 This will place the virtual enviroment in the `.venv` dir.
-If the empty dir is not create the virtual env will default to another location.
+If the empty dir is not created the virtual env will default to another location.
 
 To activate this project's virtualenv, run the following:
 ```shell
