@@ -1,7 +1,7 @@
 name: Python application
 on: [push]
 jobs:
-  lint-test:
+  check-format:
     runs-on: ubuntu-latest
     defaults:
       run:
