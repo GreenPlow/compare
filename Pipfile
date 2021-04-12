@@ -10,6 +10,7 @@ xattr = "==0.9.7"
 pytest = "==6.2.3"
 pytest-mock = "==3.5.1"
 black = "==20.8b1"
+compare = {editable = true, path = "."}
 
 [requires]
 python_version = "3.8"
