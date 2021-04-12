@@ -1,4 +1,3 @@
-
 import sys
 import args_helper
 
@@ -9,6 +8,7 @@ def main():
         raise ValueError("Python 3 or higher is required.")
 
     args_helper.parse_args(sys.argv[1:])
+
 
 if __name__ == "__main__":
     main()
