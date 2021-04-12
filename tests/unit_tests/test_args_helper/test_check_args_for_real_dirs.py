@@ -1,11 +1,10 @@
-
 import args_helper
 import pytest
 
 
 @pytest.fixture
 def mock_print(mocker):
-    return mocker.patch.object(args_helper, 'print')
+    return mocker.patch.object(args_helper, "print")
 
 
 # @pytest.fixture
@@ -20,16 +19,22 @@ class TestParseArgs:
         self.hidden = hidden
 
 
-test_args_object_default = TestParseArgs('something/directory_A', 'something/directory_B', False)
-test_args_object_hidden_files = TestParseArgs('something/directory_A', 'something/directory_B', True)
+test_args_object_default = TestParseArgs(
+    "something/directory_A", "something/directory_B", False
+)
+test_args_object_hidden_files = TestParseArgs(
+    "something/directory_A", "something/directory_B", True
+)
 
 
-@pytest.mark.parametrize("test_input", [test_args_object_default, test_args_object_hidden_files])
+@pytest.mark.parametrize(
+    "test_input", [test_args_object_default, test_args_object_hidden_files]
+)
 def test_check_two_good_dir_paths(test_input, mocker, mock_print):
     """should print message for good paths"""
     # given:
     expected_print_calls = [
-        mocker.call('\nboth paths okay!'),
+        mocker.call("\nboth paths okay!"),
     ]
 
     mocker.patch("os.path.isdir", return_value=True)
@@ -45,12 +50,11 @@ def test_check_two_good_dir_pathsh(mocker, mock_print):
     """should print message for good paths"""
     # given:
     test_args_object = TestParseArgs(
-        'something/directory_A',
-        'something/directory_B',
-        True)
+        "something/directory_A", "something/directory_B", True
+    )
 
     expected_print_calls = [
-        mocker.call('\nboth paths okay!'),
+        mocker.call("\nboth paths okay!"),
     ]
 
     mocker.patch("os.path.isdir", return_value=True)
@@ -66,18 +70,17 @@ def test_check_two_bad_dir_paths(mocker, mock_print):
     """should print message for bad path on first path to fail"""
     # given:
     test_args_object = TestParseArgs(
-        'something/bad/directory_A',
-        'something/bad/directory_B',
-        True)
+        "something/bad/directory_A", "something/bad/directory_B", True
+    )
 
-    placeholder = 'src'
+    placeholder = "src"
 
-    expected_isdir_calls =[
-        mocker.call(test_args_object.src)
-    ]
+    expected_isdir_calls = [mocker.call(test_args_object.src)]
     # TODO investigate a method to return the attribute name
     expected_print_calls = [
-        mocker.call(f'STOP... this is not a dir, {placeholder}: \'{test_args_object.src}\''),
+        mocker.call(
+            f"STOP... this is not a dir, {placeholder}: '{test_args_object.src}'"
+        ),
     ]
 
     mock_os_path_isdir = mocker.patch("os.path.isdir", return_value=False)
