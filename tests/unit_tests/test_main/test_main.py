@@ -57,3 +57,20 @@ def test_create_instance_of_Config(mocker, fixture_args_helper, fixture_Config):
 
     # then assert:
     fixture_Config.assert_called_once_with(args_object)
+
+
+def test_validate_config(mocker, fixture_args_helper, fixture_Config):
+    """should call the validate object"""
+    # given:
+    supported_python = FakeVersion(3)
+    mocker.patch.object(sys, "version_info", supported_python)
+
+    args_object = fixture_args_helper.parse_args.return_value
+    config = fixture_Config.return_value
+
+    # when:
+
+    main.main()
+
+    # then assert:
+    config.validate.assert_called_once_with()

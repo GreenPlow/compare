@@ -10,6 +10,7 @@ def main():
 
     args_obj = args_helper.parse_args(sys.argv[1:])
     config = Config(args_obj)
+    config.validate()
 
 
 if __name__ == "__main__":
