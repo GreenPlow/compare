@@ -14,11 +14,11 @@ jobs:
           python-version: 3.8
       - name: Install pipenv
         run: pip install pipenv
+      - name: Install dependencies
+        run: pipenv install -e . --dev
       - name: Check python formatting
         run: |
-          pipenv install --dev
           pipenv run black --check .
       - name: Run pytest
         run: |
-          pipenv install -e . --dev
           pipenv run pytest
