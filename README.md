@@ -2,17 +2,19 @@
 
 
 ### to develop
-1) Make a virtual environment in a project root
+1) Make a .venv dir in the project root
 ```shell
-python3 -m venv venv
+$ mkdir .venv
 ```
 
-2) Activate the venv:
+2) To initialize a Python 3 virtual environment, run:
 ```shell
-source env/bin/activate
+$ pipenv --three
 ```
+This will place the virtual enviroment in the `.venv` dir.
+If the empty dir is not create the virtual env will default to another location.
 
-3) Install the requirements
+To activate this project's virtualenv, run the following:
 ```shell
-pip3 install -r requirements.txt
+$ pipenv shell
 ```
