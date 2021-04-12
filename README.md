@@ -18,7 +18,7 @@ To activate this project's virtualenv, run the following:
 ```shell
 $ pipenv shell
 ```
-This project is structured with a seperate src and test directories. To enable pytest to run in this structure `setup.py` is used in combination with 
+This project is structured with separate src and test directories. To enable pytest to run in this structure, `setup.py` is used in combination with 
 ```
 pipenv install -e . --dev
 ```
