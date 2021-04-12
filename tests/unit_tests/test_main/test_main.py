@@ -9,6 +9,11 @@ def fixture_args_helper(mocker):
     return mocker.patch.object(main, "args_helper", autospec=True)
 
 
+@pytest.fixture()
+def fixture_Config(mocker):
+    return mocker.patch.object(main, "Config", autospec=True)
+
+
 class FakeVersion(NamedTuple):
     major: int
 
@@ -25,11 +30,10 @@ def test_fail_python3_version_check(mocker):
         main.main()
 
 
-def test_pass_python3_version_check(mocker, fixture_args_helper):
+def test_pass_python3_version_check(mocker, fixture_args_helper, fixture_Config):
     """should not raise an error when main.py is called with python3"""
     # given:
     supported_python = FakeVersion(3)
-    # TODO review second usage of patch.object(). Should we mock the sys in the prod file?
     mocker.patch.object(sys, "version_info", supported_python)
 
     # when:
@@ -38,3 +42,18 @@ def test_pass_python3_version_check(mocker, fixture_args_helper):
     except Exception as e:
         # then assert:
         assert e is None
+
+
+def test_create_instance_of_Config(mocker, fixture_args_helper, fixture_Config):
+    """should create an instance of Config"""
+    # given:
+    supported_python = FakeVersion(3)
+    mocker.patch.object(sys, "version_info", supported_python)
+
+    args_object = fixture_args_helper.parse_args.return_value
+    # when:
+
+    main.main()
+
+    # then assert:
+    fixture_Config.assert_called_once_with(args_object)

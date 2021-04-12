@@ -1,5 +1,6 @@
 import sys
 from compare import args_helper
+from compare.config import Config
 
 
 def main():
@@ -7,7 +8,8 @@ def main():
     if sys.version_info.major < 3:
         raise ValueError("Python 3 or higher is required.")
 
-    args_helper.parse_args(sys.argv[1:])
+    args_obj = args_helper.parse_args(sys.argv[1:])
+    config = Config(args_obj)
 
 
 if __name__ == "__main__":
