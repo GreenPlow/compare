@@ -14,7 +14,7 @@ jobs:
           python-version: 3.8
       - name: Install pipenv
         run: pip install pipenv    
-      - name: Link & Run tests
+      - name: Lint
         run: |
           pipenv install --dev
           pipenv run black --check .
