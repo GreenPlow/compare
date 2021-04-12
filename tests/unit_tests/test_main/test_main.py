@@ -8,6 +8,7 @@ from typing import NamedTuple
 def fixture_args_helper(mocker):
     return mocker.patch.object(main, "args_helper", autospec=True)
 
+
 class FakeVersion(NamedTuple):
     major: int
 
