@@ -1,4 +1,4 @@
-import args_helper
+from compare import args_helper
 
 
 def test_setup_parser_description(mocker):
