@@ -89,3 +89,20 @@ def test_exit_on_failed_validation(mocker, fixture_args_helper, fixture_Config):
     with pytest.raises(SystemExit, match="1"):
         # when:
         main.main()
+
+
+def test_do_not_exit_on_validation(mocker, fixture_args_helper, fixture_Config):
+    """should exit if the config validation fails"""
+    # given:
+    supported_python = FakeVersion(3)
+    mocker.patch.object(sys, "version_info", supported_python)
+    mocker.patch("sys.exit")
+
+    config_mock = fixture_Config.return_value
+    config_mock.validate.return_value = True
+
+    # when:
+    main.main()
+
+    # then assert:
+    config_mock.validate.assert_called_once_with()
