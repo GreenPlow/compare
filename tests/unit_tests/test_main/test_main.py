@@ -4,6 +4,10 @@ import pytest
 from typing import NamedTuple
 
 
+class FakeVersion(NamedTuple):
+    major: int
+
+
 @pytest.fixture()
 def fixture_args_helper(mocker):
     return mocker.patch.object(main, "args_helper", autospec=True)
@@ -14,8 +18,10 @@ def fixture_Config(mocker):
     return mocker.patch.object(main, "Config", autospec=True)
 
 
-class FakeVersion(NamedTuple):
-    major: int
+@pytest.fixture()
+def fixture_Python3(mocker):
+    supported_python = FakeVersion(3)
+    mocker.patch.object(sys, "version_info", supported_python)
 
 
 def test_fail_python3_version_check(mocker):
@@ -30,11 +36,11 @@ def test_fail_python3_version_check(mocker):
         main.main()
 
 
-def test_pass_python3_version_check(mocker, fixture_args_helper, fixture_Config):
+def test_pass_python3_version_check(
+    mocker, fixture_Python3, fixture_args_helper, fixture_Config
+):
     """should not raise an error when main.py is called with python3"""
     # given:
-    supported_python = FakeVersion(3)
-    mocker.patch.object(sys, "version_info", supported_python)
 
     # when:
     try:
@@ -44,44 +50,38 @@ def test_pass_python3_version_check(mocker, fixture_args_helper, fixture_Config)
         assert e is None
 
 
-def test_create_instance_of_Config(mocker, fixture_args_helper, fixture_Config):
+def test_create_instance_of_Config(
+    mocker, fixture_Python3, fixture_args_helper, fixture_Config
+):
     """should create an instance of Config"""
     # given:
-    supported_python = FakeVersion(3)
-    mocker.patch.object(sys, "version_info", supported_python)
-
     args_object = fixture_args_helper.parse_args.return_value
-    # when:
 
+    # when:
     main.main()
 
     # then assert:
     fixture_Config.assert_called_once_with(args_object)
 
 
-def test_validate_config(mocker, fixture_args_helper, fixture_Config):
+def test_validate_config(mocker, fixture_Python3, fixture_args_helper, fixture_Config):
     """should call the validate object"""
     # given:
-    supported_python = FakeVersion(3)
-    mocker.patch.object(sys, "version_info", supported_python)
-
     args_object = fixture_args_helper.parse_args.return_value
     config = fixture_Config.return_value
 
     # when:
-
     main.main()
 
     # then assert:
     config.validate.assert_called_once_with()
 
 
-def test_exit_on_failed_validation(mocker, fixture_args_helper, fixture_Config):
+def test_exit_on_failed_validation(
+    mocker, fixture_Python3, fixture_args_helper, fixture_Config
+):
     """should exit if the config validation fails"""
     # given:
-    supported_python = FakeVersion(3)
-    mocker.patch.object(sys, "version_info", supported_python)
-
     config_mock = fixture_Config.return_value
     config_mock.validate.return_value = False
 
@@ -91,13 +91,11 @@ def test_exit_on_failed_validation(mocker, fixture_args_helper, fixture_Config):
         main.main()
 
 
-def test_do_not_exit_on_validation(mocker, fixture_args_helper, fixture_Config):
+def test_do_not_exit_on_validation(
+    mocker, fixture_Python3, fixture_args_helper, fixture_Config
+):
     """should exit if the config validation fails"""
     # given:
-    supported_python = FakeVersion(3)
-    mocker.patch.object(sys, "version_info", supported_python)
-    mocker.patch("sys.exit")
-
     config_mock = fixture_Config.return_value
     config_mock.validate.return_value = True
 
