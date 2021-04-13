@@ -10,7 +10,7 @@ def main():
 
     args_obj = args_helper.parse_args(sys.argv[1:])
     config = Config(args_obj)
-    if not config.validate():
+    if not config.isvalid():
         sys.exit(1)
 
 

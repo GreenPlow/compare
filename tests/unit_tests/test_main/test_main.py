@@ -64,8 +64,8 @@ def test_create_instance_of_Config(
     fixture_Config.assert_called_once_with(args_object)
 
 
-def test_validate_config(mocker, fixture_Python3, fixture_args_helper, fixture_Config):
-    """should call the validate object"""
+def test_isvalid_config(mocker, fixture_Python3, fixture_args_helper, fixture_Config):
+    """should call isvalid"""
     # given:
     args_object = fixture_args_helper.parse_args.return_value
     config = fixture_Config.return_value
@@ -74,7 +74,7 @@ def test_validate_config(mocker, fixture_Python3, fixture_args_helper, fixture_C
     main.main()
 
     # then assert:
-    config.validate.assert_called_once_with()
+    config.isvalid.assert_called_once_with()
 
 
 def test_exit_on_failed_validation(
@@ -83,7 +83,7 @@ def test_exit_on_failed_validation(
     """should exit if the config validation fails"""
     # given:
     config_mock = fixture_Config.return_value
-    config_mock.validate.return_value = False
+    config_mock.isvalid.return_value = False
 
     # then assert:
     with pytest.raises(SystemExit, match="1"):
@@ -91,16 +91,16 @@ def test_exit_on_failed_validation(
         main.main()
 
 
-def test_do_not_exit_on_validation(
+def test_do_not_exit_on_isvalid(
     mocker, fixture_Python3, fixture_args_helper, fixture_Config
 ):
     """should exit if the config validation fails"""
     # given:
     config_mock = fixture_Config.return_value
-    config_mock.validate.return_value = True
+    config_mock.isvalid.return_value = True
 
     # when:
     main.main()
 
     # then assert:
-    config_mock.validate.assert_called_once_with()
+    config_mock.isvalid.assert_called_once_with()
