@@ -1,8 +1,12 @@
-from compare.config import Config
 import pytest
+import unittest.mock as mock
+
+from compare import config
+
+# from compare.config import Config
 
 
-class TestParseArgs:
+class FakeParseArgs:
     """Example of an object returned from args_helper.parse_args"""
 
     __test__ = False  # Stops pytest from warning that it cannot instantiate this class
@@ -13,30 +17,27 @@ class TestParseArgs:
         self.hidden = hidden
 
 
-@pytest.fixture()
-def fixture_Config(mocker):
-    return mocker.patch.object(Config, "Config", autospec=True)
+class TestClass:
+    def test_call_samepath(self, mocker):
+        """should call the samepath method and continue if samepath is false"""
 
+        patcher1 = mock.patch.object(config.Config, "issamepath")
+        issamepath_patched = patcher1.start()
 
-test_args_object_default = TestParseArgs(
-    "something/directory_A", "something/directory_B", False
-)
+        # given:
+        mock.patch.object(config, "os", autospec=True)
+        args_object_default = FakeParseArgs(
+            "something/directory_A", "something/directory_B", False
+        )
 
-test_args_object_hidden_files = TestParseArgs(
-    "something/directory_A", "something/directory_B", True
-)
+        test_config = config.Config(args_object_default)
 
+        # when:
+        test_config.isvalid()
 
-@pytest.mark.parametrize(
-    "test_input", [test_args_object_default, test_args_object_hidden_files]
-)
-def test_call_samepath(test_input, mocker):
-    """should call the samepath method and continue if samepath is false"""
-    # given:
-    config = Config(test_input)
+        # then assert:
 
-    # when:
+        assert issamepath_patched.call_count == 1
 
-    # then assert:
-
-    """should call the samepath method and return false if samepath is true"""
+        # clean up
+        patcher1.stop()
