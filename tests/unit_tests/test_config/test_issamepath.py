@@ -2,11 +2,6 @@ import pytest
 from compare import config
 
 
-@pytest.fixture
-def mock_print(mocker):
-    return mocker.patch.object(config, "print")
-
-
 class FakeParseArgs:
     """Example of an object returned from args_helper.parse_args"""
 
