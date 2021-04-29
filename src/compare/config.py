@@ -14,3 +14,10 @@ class Config:
             print("\nSTOP... The origin and destination paths are the same.\n")
             return True
         return False
+
+    def isbadpath(self):
+        pass
+
+    def isvalid(self):
+        self.issamepath()
+        pass
