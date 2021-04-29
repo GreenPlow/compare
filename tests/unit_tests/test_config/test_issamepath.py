@@ -3,23 +3,24 @@ from compare import config
 from tests.unit_tests.test_config.shared_classes import FakeParseArgs
 
 
-# test_args_object_default = FakeParseArgs(
-#     "something/directory_A", "something/directory_B", False
-# )
-# test_args_object_hidden_files = FakeParseArgs(
-#     "something/directory_A", "something/directory_B", True
-# )
-
-
 class TestClass:
-    def test_issamepath_true(self, mocker, mock_os, mock_print):
+
+    test_args_object_default = FakeParseArgs(
+        "something/directory_A", "something/directory_A", False
+    )
+    test_args_object_hidden_files = FakeParseArgs(
+        "something/directory_A", "something/directory_A", True
+    )
+
+    @pytest.mark.parametrize(
+        "test_input", [test_args_object_default, test_args_object_hidden_files]
+    )
+    def test_issamepath_true(self, test_input, mock_os, mock_print):
         """should return true if the paths are the same"""
 
         # given:
-        args_object_default = FakeParseArgs(
-            "something/directory_A", "something/directory_A", False
-        )
-        test_config = config.Config(args_object_default)
+        mock_os.path.samefile.return_value = True
+        test_config = config.Config(test_input)
 
         # when:
         actual = test_config.issamepath()
@@ -30,7 +31,7 @@ class TestClass:
         )
         assert actual == True
 
-    def test_issamepath_false(self, mocker, mock_os, mock_print):
+    def test_issamepath_false(self, mock_os, mock_print):
         """should return false if both paths are different"""
 
         # given
