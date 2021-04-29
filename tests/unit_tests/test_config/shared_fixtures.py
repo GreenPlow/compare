@@ -6,6 +6,7 @@ from compare import config
 def mock_print(mocker):
     return mocker.patch.object(config, "print")
 
+
 @pytest.fixture
 def mock_os(mocker):
     return mocker.patch.object(config, "os", autospec=True)
