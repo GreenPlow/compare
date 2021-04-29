@@ -1,24 +1,14 @@
 import pytest
 from compare import config
+from tests.unit_tests.test_config.shared_classes import FakeParseArgs
 
 
-class FakeParseArgs:
-    """Example of an object returned from args_helper.parse_args"""
-
-    __test__ = False  # Stops pytest from warning that it cannot instantiate this class
-
-    def __init__(self, origin, destination, hidden):
-        self.origin = origin
-        self.destination = destination
-        self.hidden = hidden
-
-
-test_args_object_default = FakeParseArgs(
-    "something/directory_A", "something/directory_B", False
-)
-test_args_object_hidden_files = FakeParseArgs(
-    "something/directory_A", "something/directory_B", True
-)
+# test_args_object_default = FakeParseArgs(
+#     "something/directory_A", "something/directory_B", False
+# )
+# test_args_object_hidden_files = FakeParseArgs(
+#     "something/directory_A", "something/directory_B", True
+# )
 
 
 class TestClass:
