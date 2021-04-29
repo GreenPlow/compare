@@ -22,11 +22,10 @@ test_args_object_hidden_files = FakeParseArgs(
 
 
 class TestClass:
-    def test_issamepath_true(self, mocker, mock_print):
+    def test_issamepath_true(self, mocker, mock_os, mock_print):
         """should return true if the paths are the same"""
 
         # given:
-        mocker.patch.object(config, "os", autospec=True)
         args_object_default = FakeParseArgs(
             "something/directory_A", "something/directory_A", False
         )
@@ -41,11 +40,10 @@ class TestClass:
         )
         assert actual == True
 
-    def test_issamepath_false(self, mocker, mock_print):
+    def test_issamepath_false(self, mocker, mock_os, mock_print):
         """should return false if both paths are different"""
 
         # given
-        mock_os = mocker.patch.object(config, "os", autospec=True)
         mock_os.path.samefile.return_value = False
 
         args_object_default = FakeParseArgs(
