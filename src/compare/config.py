@@ -25,7 +25,10 @@ class Config:
                 return True
         return False
 
+    def printpaths(self):
+        print("path to copy files from...", self.origin_path)
+        print("path to put copied files...", self.destination_path, "\n")
 
     def isvalid(self):
         if self.issamepath():
-
+            pass
