@@ -16,8 +16,16 @@ class Config:
         return False
 
     def isbadpath(self):
-        pass
+        dictionary = {"origin": self.origin_path, "destination": self.destination_path}
+        for key in dictionary:
+            if os.path.isdir(dictionary[key]):
+                continue
+            else:
+                print(f"\nSTOP... '{dictionary[key]}' is not a dir\n")
+                return True
+        return False
+
 
     def isvalid(self):
-        self.issamepath()
-        pass
+        if self.issamepath():
+
