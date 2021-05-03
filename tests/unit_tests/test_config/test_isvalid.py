@@ -1,43 +1,87 @@
 import pytest
-import unittest.mock as mock
-
 from compare import config
+from tests.unit_tests.test_config.shared_classes import FakeParseArgs
 
-# from compare.config import Config
+test_args_object_default = FakeParseArgs(
+    "something/directory_A", "something/directory_A", False
+)
 
 
-class FakeParseArgs:
-    """Example of an object returned from args_helper.parse_args"""
+@pytest.fixture
+def mock_issamepath(mocker):
+    return mocker.patch.object(config.Config, "issamepath")
 
-    __test__ = False  # Stops pytest from warning that it cannot instantiate this class
 
-    def __init__(self, origin, destination, hidden):
-        self.origin = origin
-        self.destination = destination
-        self.hidden = hidden
+@pytest.fixture
+def mock_isbadpath(mocker):
+    return mocker.patch.object(config.Config, "isbadpath")
+
+
+@pytest.fixture
+def mock_printpaths(mocker):
+    return mocker.patch.object(config.Config, "printpaths")
 
 
 class TestClass:
-    def test_call_samepath(self, mocker):
-        """should call the samepath method and continue if samepath is false"""
+    def test_isvalid_issamepath_called(self, mock_os, mock_issamepath):
+        """should call the issamepath method"""
+        # given
+        test_config = config.Config(test_args_object_default)
 
-        patcher1 = mock.patch.object(config.Config, "issamepath")
-        issamepath_patched = patcher1.start()
-
-        # given:
-        mock.patch.object(config, "os", autospec=True)
-        args_object_default = FakeParseArgs(
-            "something/directory_A", "something/directory_B", False
-        )
-
-        test_config = config.Config(args_object_default)
-
-        # when:
+        # when
         test_config.isvalid()
 
-        # then assert:
+        # then
+        assert mock_issamepath.call_count == 1
 
-        assert issamepath_patched.call_count == 1
+    def test_isvalid_isbadpath_called(self, mock_os, mock_issamepath, mock_isbadpath):
+        """should call the isbadpath method"""
+        # given
+        mock_issamepath.return_value = False
+        test_config = config.Config(test_args_object_default)
 
-        # clean up
-        patcher1.stop()
+        # when
+        test_config.isvalid()
+
+        # then
+        assert mock_isbadpath.call_count == 1
+
+    def test_isvalid_return_true(
+        self, mock_issamepath, mock_isbadpath, mock_printpaths
+    ):
+        """should printpaths and return true if both checks pass"""
+        # given
+        mock_issamepath.return_value = False
+        mock_isbadpath.return_value = False
+        test_config = config.Config(test_args_object_default)
+
+        # when
+        actual = test_config.isvalid()
+
+        # then
+        assert mock_printpaths.call_count == 1
+        assert actual == True
+
+    @pytest.mark.parametrize(
+        "test_input_issamepath,test_input_isbadpath", [(True, False), (False, True)]
+    )
+    def test_isvalid_return_false(
+        self,
+        test_input_issamepath,
+        test_input_isbadpath,
+        mock_issamepath,
+        mock_isbadpath,
+        mock_printpaths,
+    ):
+        """should return false if either checks fails"""
+        # given
+        mock_issamepath.return_value = test_input_issamepath
+        mock_isbadpath.return_value = test_input_isbadpath
+        test_config = config.Config(test_args_object_default)
+
+        # when
+        actual = test_config.isvalid()
+
+        # then
+        assert mock_printpaths.call_count == 0
+        assert actual == False
