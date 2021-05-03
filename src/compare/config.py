@@ -31,4 +31,9 @@ class Config:
 
     def isvalid(self):
         if self.issamepath():
-            pass
+            return False
+        elif self.isbadpath():
+            return False
+        else:
+            self.printpaths()
+            return True
