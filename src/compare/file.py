@@ -9,3 +9,9 @@ class File:
         self.kMDItemKind = None
         self.kMDItemPhysicalSize = None
         self.kMDItemLogicalSize = None
+
+
+class OriginFile(File):
+    def __init__(self, filename, path):
+        super().__init__(filename, path)
+        self.location = "origin"
