@@ -36,9 +36,16 @@ class TestClass:
         assert isinstance(actual[1], file.OriginFile)
         assert len(actual) is 2
 
-        # Note that files returned from listdir do not appear to be ordered
         assert actual[0].path == origin_path
-        assert actual[0].filename == filenameTwo
-
         assert actual[1].path == origin_path
-        assert actual[1].filename == filenameOne
+
+        # Note that files returned from listdir do not appear to be ordered and may be impacted by the OS
+        # Was able to pass the test locally, but then failed when running in the cloud
+        # Conditional below should allow it to be independant of OS
+
+        if actual[0].filename == filenameOne:
+            assert actual[1].filename == filenameTwo
+        elif actual[0].filename == filenameTwo:
+            assert actual[1].filename == filenameOne
+        else:
+            assert False is True
