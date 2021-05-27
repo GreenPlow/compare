@@ -60,7 +60,7 @@ class TestClass:
 
         # then
         assert mock_printpaths.call_count == 1
-        assert actual == True
+        assert actual is True
 
     @pytest.mark.parametrize(
         "test_input_issamepath,test_input_isbadpath", [(True, False), (False, True)]
@@ -84,4 +84,4 @@ class TestClass:
 
         # then
         assert mock_printpaths.call_count == 0
-        assert actual == False
+        assert actual is False

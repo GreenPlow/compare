@@ -21,7 +21,7 @@ class TestClass:
         mock_print.assert_called_once_with(
             f"\nSTOP... '{test_config.destination_path}' is not a dir\n"
         )
-        assert actual == True
+        assert actual is True
 
     def test_isbadpath_false(self, mock_os, mock_print):
         """should return false if both paths are valid"""
@@ -38,4 +38,4 @@ class TestClass:
 
         # then assert:
         mock_print.assert_not_called()
-        assert actual == False
+        assert actual is False
