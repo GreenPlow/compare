@@ -1,4 +1,5 @@
 import os
+from compare.file import OriginFile as newOriginFileObject
 
 
 class Config:
@@ -37,3 +38,17 @@ class Config:
         else:
             self.printpaths()
             return True
+
+    def get_origin_files(self):
+        """Return a list of objects. Each object represents a single file. Do not make objects for sub directories."""
+
+        if self.include_hidden:
+            print("...including hidden files")
+            return ["hold"]
+        else:
+            "list comprehension"
+            return [
+                newOriginFileObject(filename, self.origin_path)
+                for filename in os.listdir(self.origin_path)
+                if True
+            ]
