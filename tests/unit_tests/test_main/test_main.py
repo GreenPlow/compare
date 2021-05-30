@@ -37,7 +37,7 @@ def test_fail_python3_version_check(mocker):
 
 
 def test_pass_python3_version_check(
-    mocker, fixture_Python3, fixture_args_helper, fixture_Config
+    fixture_Python3, fixture_args_helper, fixture_Config
 ):
     """should not raise an error when main.py is called with python3"""
     # given:
@@ -51,7 +51,7 @@ def test_pass_python3_version_check(
 
 
 def test_create_instance_of_Config(
-    mocker, fixture_Python3, fixture_args_helper, fixture_Config
+    fixture_Python3, fixture_args_helper, fixture_Config
 ):
     """should create an instance of Config"""
     # given:
@@ -64,7 +64,7 @@ def test_create_instance_of_Config(
     fixture_Config.assert_called_once_with(args_object)
 
 
-def test_isvalid_config(mocker, fixture_Python3, fixture_args_helper, fixture_Config):
+def test_isvalid_config(fixture_Python3, fixture_args_helper, fixture_Config):
     """should call isvalid"""
     # given:
     args_object = fixture_args_helper.parse_args.return_value
@@ -78,7 +78,7 @@ def test_isvalid_config(mocker, fixture_Python3, fixture_args_helper, fixture_Co
 
 
 def test_exit_on_failed_validation(
-    mocker, fixture_Python3, fixture_args_helper, fixture_Config
+    fixture_Python3, fixture_args_helper, fixture_Config
 ):
     """should exit if the config validation fails"""
     # given:
@@ -92,7 +92,7 @@ def test_exit_on_failed_validation(
 
 
 def test_do_not_exit_on_isvalid(
-    mocker, fixture_Python3, fixture_args_helper, fixture_Config
+    fixture_Python3, fixture_args_helper, fixture_Config
 ):
     """should exit if the config validation fails"""
     # given:
