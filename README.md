@@ -32,7 +32,15 @@ $ pipenv --rm
 
 ### pytest
 This project is structured with `src` and `test` directories. To enable pytest to run in this structure, `setup.py` is used in combination with: 
-```
+```shell
 pipenv install -e . --dev
 ```
 to generate an editable install of the package.
+
+### black
+This project is formatted with black
+```shell
+pipenv run black --check .
+```
+
+remove `--check` to format
