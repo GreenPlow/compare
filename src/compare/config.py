@@ -44,7 +44,11 @@ class Config:
 
         if self.include_hidden:
             print("...including hidden files")
-            return ["hold"]
+            return [
+                newOriginFileObject(filename, self.origin_path)
+                for filename in os.listdir(self.origin_path)
+                if os.path.isfile(os.path.join(self.origin_path, filename))
+            ]
         else:
             "list comprehension"
             return [
