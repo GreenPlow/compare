@@ -91,9 +91,7 @@ def test_exit_on_failed_validation(
         main.main()
 
 
-def test_do_not_exit_on_isvalid(
-    fixture_Python3, fixture_args_helper, fixture_Config
-):
+def test_do_not_exit_on_isvalid(fixture_Python3, fixture_args_helper, fixture_Config):
     """should exit if the config validation fails"""
     # given:
     config_mock = fixture_Config.return_value

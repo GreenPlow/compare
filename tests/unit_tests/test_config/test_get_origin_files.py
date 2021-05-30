@@ -131,7 +131,6 @@ class TestClass:
         assert actual[0].path == origin_path
         assert actual[1].path == origin_path
 
-
         # Note that listdir does not return an ordered list and may be impacted by the OS
         # Was able to pass the test locally, but then failed when running in the cloud
         # Conditional below should allow it to be independant of OS
