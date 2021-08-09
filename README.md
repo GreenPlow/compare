@@ -22,7 +22,7 @@ $ mkdir .venv
 $ pipenv --three
 ```
 This will place the virtual environment in the `.venv` directory.
-The virtual env will default to another location if an empty directory isn't created,
+The virtual env will default to another location if an empty directory isn't created.
 
 
 3) To install dependencies (need --dev for dev dependencies), run:
