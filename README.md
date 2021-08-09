@@ -1,7 +1,17 @@
-### compare
+## Compare
+This project is a work in progress. It is not complete.
+### Use
+To use, call the main.py from the terminal with the `source` and `destination` paths.
 
+Command Line Arguments:
 
-### to develop
+|Arguments|Description|
+|:---|:---|
+|origin|Path to the directory files will be copied from.|
+|destination|Path to the directory files will be copied to.|
+|--hidden|Optional! Script will evaluate hidden and copy hidden files.|
+
+### To develop
 1) Make a .venv dir in the project root
 ```shell
 $ mkdir .venv
