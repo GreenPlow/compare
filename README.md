@@ -21,8 +21,8 @@ $ mkdir .venv
 ```shell
 $ pipenv --three
 ```
-This will place the virtual enviroment in the `.venv` dir.
-If the empty dir is not created the virtual env will default to another location.
+This will place the virtual environment in the `.venv` directory.
+The virtual env will default to another location if an empty directory isn't created.
 
 
 3) To install dependencies (need --dev for dev dependencies), run:
@@ -41,14 +41,14 @@ $ pipenv --rm
 ```
 
 ### pytest
-This project is structured with `src` and `test` directories. To enable pytest to run in this structure, `setup.py` is used in combination with: 
+Project structured with `src` and `test` directories. To enable pytest to run in this structure, `setup.py` is used in combination with: 
 ```shell
 pipenv install -e . --dev
 ```
 to generate an editable install of the package.
 
 ### black
-This project is formatted with black
+Project formatted with black.
 ```shell
 pipenv run black --check .
 ```
