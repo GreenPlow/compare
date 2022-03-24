@@ -9,7 +9,7 @@ xattr = "==0.9.9"
 [dev-packages]
 pytest = "==6.2.5"
 pytest-mock = "==3.7.0"
-black = "==21.12b0"
+black = "==22.1.0"
 compare = {editable = true, path = "."}
 
 [requires]
